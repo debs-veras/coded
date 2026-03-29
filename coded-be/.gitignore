@@ -1,0 +1,20 @@
+# Django files
+*.sqlite3
+db.sqlite3
+tests.py
+
+# Python files
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# Local development
+.env
+secret.py
+
+# Docker entries (already has .dockerignore, but good to have)
+docker-compose.override.yml

@@ -1,0 +1,119 @@
+@import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap');
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Fonts */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+
+  /* Green CED Ceará (Primary) */
+  --color-primary-50: #ebfef2;
+  --color-primary-100: #cefde1;
+  --color-primary-200: #a1fac6;
+  --color-primary-300: #65f2a4;
+  --color-primary-400: #2ee280;
+  --color-primary-500: #08c863;
+  --color-primary-600: #009b49;
+  --color-primary-700: #037c3e;
+  --color-primary-800: #066234;
+  --color-primary-900: #07502d;
+  --color-primary-950: #032d18;
+
+  /* Yellow/Orange CED Ceará (Secondary) */
+  --color-secondary-50: #fff9eb;
+  --color-secondary-100: #fff1c6;
+  --color-secondary-200: #ffe188;
+  --color-secondary-300: #ffcc4a;
+  --color-secondary-400: #ffb11b;
+  --color-secondary-500: #fa9704;
+  --color-secondary-600: #dd7302;
+  --color-secondary-700: #b75206;
+  --color-secondary-800: #933f0d;
+  --color-secondary-900: #7a350f;
+  --color-secondary-950: #461a02;
+
+  /* Base aliases for simple usage */
+  --color-primary: var(--color-primary-600);
+  --color-secondary: var(--color-secondary-500);
+
+  /* Animations */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes glass-shine {
+    from {
+      left: -100%;
+    }
+    to {
+      left: 100%;
+    }
+  }
+
+  --animate-fade-in-up: fade-in-up 0.6s ease-out forwards;
+  --animate-float: float 4s ease-in-out infinite;
+  --animate-glass-shine: glass-shine 2s linear infinite;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply font-sans;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-slate-100 dark:bg-neutral-900;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary-500/30 hover:bg-primary-500/50 rounded-full transition-colors;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .glass-card {
+    @apply bg-white/60 dark:bg-white/5 border border-white/40 dark:border-white/10 backdrop-blur-3xl shadow-2xl;
+  }
+}
+
+
