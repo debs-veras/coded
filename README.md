@@ -9,10 +9,12 @@ Bem-vindo ao **Coded**, uma plataforma robusta para gestão de atividades escola
 Antes de começar, certifique-se de ter as seguintes ferramentas instaladas em sua máquina:
 
 ### Geral
+
 - **Git**: Para clonar e gerenciar versões do código.
 - **Docker & Docker Compose** (Opcional, mas altamente recomendado): Para rodar o ambiente completo de forma isolada e rápida.
 
 ### Para Execução Manual
+
 - **Python 3.10 ou superior**: Necessário para o Backend (Django).
 - **Node.js 18 ou superior**: Necessário para o Frontend (React).
 - **Gerenciador de Pacotes Node**: Recomendamos o **pnpm** (detectado no projeto) ou **npm**.
@@ -25,10 +27,12 @@ O Docker simplifica o processo configurando o ambiente completo, incluindo as de
 
 1.  **Subir os serviços**:
     Na raiz do projeto, execute:
+
     ```bash
     docker compose up -d --build
     ```
-    *Isso vai construir as imagens, criar os volumes e iniciar os containers em segundo plano.*
+
+    _Isso vai construir as imagens, criar os volumes e iniciar os containers em segundo plano._
 
 2.  **Migrações Automáticas**:
     O projeto está configurado com um script de `entrypoint` no backend. Assim que o container sobe, ele **roda as migrações automaticamente**. Você não precisa rodar o comando `migrate` manualmente no primeiro acesso.
@@ -120,7 +124,9 @@ A interface moderna que consome a API do backend.
 Abaixo apresentamos a organização interna de cada módulo do sistema para facilitar a navegação no código-fonte.
 
 ### 🐍 Backend (`/coded-be`)
+
 O backend segue o padrão modular do Django, separando a lógica de negócio por domínio:
+
 - **`config/`**: Contém as configurações globais do Django (`settings.py`), roteamento raiz (`urls.py`) e definições de WSGI/ASGI.
 - **`apps/`**: Diretório centralizado das aplicações:
   - **`accounts/`**: Gerenciamento de sessões e autenticação (JWT).
@@ -132,7 +138,9 @@ O backend segue o padrão modular do Django, separando a lógica de negócio por
 - **`requirements.txt`**: Lista de todas as dependências Python necessárias.
 
 ### ⚛️ Frontend (`/coded-fe`)
+
 O frontend utiliza uma arquitetura baseada em componentes e serviços, organizada em `src/`:
+
 - **`src/components/`**: Peças de UI reutilizáveis (botões, modais, cards, sidebar).
 - **`src/pages/`**: Telas completas da aplicação, organizadas por contexto (Login, Dashboard, Atividades).
 - **`src/services/`**: Camada de comunicação com o backend usando Axios.
@@ -157,6 +165,7 @@ Após rodar o comando `createsuperuser`, você pode acessar a API ou o Frontend 
 O arquivo `.env` é fundamental para separar a configuração do código. No **Coded**, ele é usado principalmente no frontend para definir para onde as requisições devem ir.
 
 ### Frontend (`coded-fe/.env`)
+
 - **`VITE_URL_API`**: Define o endereço base do backend (ex: `http://127.0.0.1:8000`).
 - **Segurança**: No Vite, apenas variáveis prefixadas com `VITE_` são expostas ao código do cliente. Isso evita que chaves secretas do servidor vazem acidentalmente para o navegador.
 
@@ -167,7 +176,9 @@ O arquivo `.env` é fundamental para separar a configuração do código. No **C
 O **Coded** utiliza um sistema de Controle de Acesso Baseado em Papéis para garantir a segurança e a privacidade dos dados. Cada usuário possui um `role` definido que determina suas permissões dentro da plataforma.
 
 ### 1. 🎓 Estudante (STUDENT)
+
 O foco do aluno é o consumo de conteúdo e a entrega de tarefas.
+
 - **Dashboard Pessoal**: Acesso a métricas de desempenho, médias e prazos urgentes.
 - **Atividades**: Pode visualizar todas as atividades publicadas para a sua **Turma (`ClassGroup`)**.
 - **Submissões**: Pode enviar uma resposta para cada atividade, desde que esteja dentro do prazo.
@@ -175,7 +186,9 @@ O foco do aluno é o consumo de conteúdo e a entrega de tarefas.
 - **Restrição**: Não tem acesso aos dados de outros alunos ou de turmas nas quais não está matriculado.
 
 ### 2. 👨‍🏫 Professor (TEACHER)
+
 O foco do professor é a gestão pedagógica e a avaliação.
+
 - **Gestão de Atividades**: Pode criar, editar e remover atividades para as turmas que leciona.
 - **Avaliação**: Tem acesso a todas as submissões enviadas pelos alunos para suas atividades.
 - **Correção**: Pode atribuir notas (0 a 10) e escrever feedbacks detalhados para cada aluno.
@@ -183,7 +196,9 @@ O foco do professor é a gestão pedagógica e a avaliação.
 - **Restrição**: Não pode gerenciar usuários do sistema ou alterar configurações globais.
 
 ### 3. 🛡️ Administrador (ADMIN)
+
 O foco do administrador é a manutenção e a gestão global.
+
 - **Gestão de Usuários**: CRUD completo de Alunos, Professores e outros Admins.
 - **Gestão de Turmas**: Cria e organiza os grupos de alunos e vincula os professores responsáveis.
 - **Visibilidade Total**: Pode visualizar qualquer dado no sistema para fins de suporte e auditoria.
@@ -224,37 +239,41 @@ O **Coded** foi projetado com um foco rigoroso em escalabilidade, segurança e e
 Abaixo estão os endereços completos da API, organizados por recurso.
 
 ### 🔐 Autenticação (`/auth/`)
-| Método | Endpoint | Descrição |
-| :--- | :--- | :--- |
-| `POST` | `/auth/login` | Autenticação inicial, retorna Access e Refresh tokens. |
-| `POST` | `/auth/logout` | Invalida o Refresh Token atual. |
+
+| Método | Endpoint              | Descrição                                                |
+| :----- | :-------------------- | :------------------------------------------------------- |
+| `POST` | `/auth/login`         | Autenticação inicial, retorna Access e Refresh tokens.   |
+| `POST` | `/auth/logout`        | Invalida o Refresh Token atual.                          |
 | `POST` | `/auth/token/refresh` | Gera um novo Access Token a partir de um Refresh válido. |
-| `GET` | `/auth/verify` | Retorna os dados do usuário dono do token atual. |
+| `GET`  | `/auth/verify`        | Retorna os dados do usuário dono do token atual.         |
 
 ### 👤 Usuários (`/users/`)
-| Método | Endpoint | Descrição |
-| :--- | :--- | :--- |
-| `GET` | `/users/dashboard` | Estatísticas e progresso específicas para o **Aluno**. |
-| `GET` | `/users` | Listagem de todos os usuários (Apenas Admin). |
-| `POST` | `/users` | Cadastro de novos usuários. |
-| `GET` | `/users/{id}` | Detalhes de um perfil específico. |
-| `PATCH` | `/users/{id}` | Atualização de dados cadastrais. |
+
+| Método  | Endpoint           | Descrição                                              |
+| :------ | :----------------- | :----------------------------------------------------- |
+| `GET`   | `/users/dashboard` | Estatísticas e progresso específicas para o **Aluno**. |
+| `GET`   | `/users`           | Listagem de todos os usuários (Apenas Admin).          |
+| `POST`  | `/users`           | Cadastro de novos usuários.                            |
+| `GET`   | `/users/{id}`      | Detalhes de um perfil específico.                      |
+| `PATCH` | `/users/{id}`      | Atualização de dados cadastrais.                       |
 
 ### 🏫 Turmas (`/classes/`)
-| Método | Endpoint | Descrição |
-| :--- | :--- | :--- |
-| `GET` | `/classes` | Listagem de turmas ativas. |
-| `POST` | `/classes` | Criação de nova turma. |
-| `GET` | `/classes/{id}` | Detalhes da turma e lista de alunos matriculados. |
+
+| Método | Endpoint        | Descrição                                         |
+| :----- | :-------------- | :------------------------------------------------ |
+| `GET`  | `/classes`      | Listagem de turmas ativas.                        |
+| `POST` | `/classes`      | Criação de nova turma.                            |
+| `GET`  | `/classes/{id}` | Detalhes da turma e lista de alunos matriculados. |
 
 ### 📝 Atividades e Submissões
-| Método | Endpoint | Descrição |
-| :--- | :--- | :--- |
-| `GET` | `/atividades` | Listagem geral de atividades. |
-| `POST` | `/atividades` | Criação de atividade (Professor). |
-| `GET` | `/me/atividades` | Filtra atividades vinculadas ao usuário. |
-| `POST` | `/respostas` | Envio de resposta para uma atividade (Aluno). |
-| `GET` | `/me/respostas` | Lista de submissões do aluno |
+
+| Método | Endpoint         | Descrição                                     |
+| :----- | :--------------- | :-------------------------------------------- |
+| `GET`  | `/atividades`    | Listagem geral de atividades.                 |
+| `POST` | `/atividades`    | Criação de atividade (Professor).             |
+| `GET`  | `/me/atividades` | Filtra atividades vinculadas ao usuário.      |
+| `POST` | `/respostas`     | Envio de resposta para uma atividade (Aluno). |
+| `GET`  | `/me/respostas`  | Lista de submissões do aluno                  |
 
 ---
 
@@ -263,7 +282,9 @@ Abaixo estão os endereços completos da API, organizados por recurso.
 Para facilitar o desenvolvimento e a manutenção, o projeto conta com os seguintes scripts:
 
 ### 🐍 Backend (Django)
+
 Utilize estes comandos dentro da pasta `coded-be/` (com o venv ativo):
+
 - `python manage.py runserver`: Inicia o servidor de desenvolvimento.
 - `python manage.py migrate`: Aplica as migrações ao banco de dados.
 - `python manage.py makemigrations`: Gera novos arquivos de migração após mudanças nos modelos.
@@ -271,9 +292,31 @@ Utilize estes comandos dentro da pasta `coded-be/` (com o venv ativo):
 - `python manage.py shell`: Abre um terminal interativo com o contexto do Django.
 
 ### ⚛️ Frontend (React/Vite)
+
 Utilize estes comandos dentro da pasta `coded-fe/`:
+
 - `pnpm dev`: Inicia o ambiente de desenvolvimento com Hot Module Replacement (HMR).
 - `pnpm build`: Compila o projeto e gera arquivos otimizados para produção na pasta `dist/`.
 - `pnpm lint`: Executa a verificação estática do código para encontrar problemas de padrão e sintaxe.
 - `pnpm format`: Formata automaticamente todos os arquivos usando o Prettier.
 
+---
+
+## 🚀 Possíveis Melhorias
+
+Sugestões de evolução para o projeto:
+
+### 🛠️ Engenharia e Infraestrutura
+
+- [ ] **Testes Automatizados**: Implementação de uma suíte completa de testes unitários e de integração (Pytest no backend e Vitest no frontend).
+- [ ] **Pipeline CI/CD**: Configuração de GitHub Actions para automação de linting, testes e processos de deploy.
+- [ ] **Observabilidade**: Integração com ferramentas de monitoramento de erros (como Sentry) e logs centralizados.
+- [ ] **Redis para Cache**: Implementação de camadas de cache para endpoints de alta demanda, como as estatísticas do dashboard.
+
+### ✨ Novas Funcionalidades
+
+- [ ] **Notificações em Tempo Real**: Uso de WebSockets (Django Channels) para alertar usuários sobre novos prazos, postagens e correções de atividades.
+- [ ] **Armazenamento em Nuvem**: Integração com AWS S3 ou Google Cloud Storage para gerenciar uploads de arquivos pesados e anexos pedagógicos.
+- [ ] **Relatórios Avançados**: Exportação de boletins e relatórios de desempenho em formatos PDF ou Excel para professores e administradores.
+- [ ] **Recuperação de Senha**: Fluxo completo de "Esqueci minha senha" com envio de e-mails via SMTP ou serviços como SendGrid.
+- [ ] **TanStack Query (React Query)**: Implementação para gerenciar o estado do servidor, eliminando a complexidade de `useEffect` manuais para fetch de dados e garantindo cache e revalidação eficientes.
