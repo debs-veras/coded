@@ -7,18 +7,14 @@ RUN npm install -g pnpm
 # Definir o diretório de trabalho no container
 WORKDIR /app
 
-# Copiar os arquivos de dependências
+# Copiar os arquivos de definição de dependências primeiro
 COPY package.json pnpm-lock.yaml* ./
 
-# Instalar as dependências
+# Instalar as dependências (aproveita cache se package.json não mudar)
 RUN pnpm install
 
-# Copiar o restante do código da aplicação
 COPY . .
 
-# Expor a porta que o Vite usa
 EXPOSE 5173
 
-# Executar o comando para rodar o servidor de desenvolvimento
-# É importante rodar com "--host" para que o Vite escute todas as interfaces de rede
 CMD ["pnpm", "run", "dev", "--host"]

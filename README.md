@@ -21,31 +21,33 @@ Antes de começar, certifique-se de ter as seguintes ferramentas instaladas em s
 
 ## 🐳 Opção 1: Execução via Docker (Recomendado)
 
-O Docker simplifica o processo configurando o banco de dados e as dependências automaticamente dentro de containers.
+O Docker simplifica o processo configurando o ambiente completo, incluindo as dependências e a persistência do banco de dados automaticamente.
 
-1. **Subir os serviços**:
-   Na raiz do projeto, abra o terminal e execute:
-   ```bash
-   docker-compose up --build
-   ```
-2. **Preparar o Banco de Dados (Migrações)**:
-   Com os containers rodando, execute o comando para criar as tabelas:
-   ```bash
-   docker compose exec backend python manage.py migrate
-   ```
+1.  **Subir os serviços**:
+    Na raiz do projeto, execute:
+    ```bash
+    docker compose up -d --build
+    ```
+    *Isso vai construir as imagens, criar os volumes e iniciar os containers em segundo plano.*
 
-3. **Aguardar a inicialização**:
-   - O **Backend** estará disponível em: `http://localhost:8000`
-   - O **Frontend** estará disponível em: `http://localhost:5173`
+2.  **Migrações Automáticas**:
+    O projeto está configurado com um script de `entrypoint` no backend. Assim que o container sobe, ele **roda as migrações automaticamente**. Você não precisa rodar o comando `migrate` manualmente no primeiro acesso.
 
-4. **Criar Usuário Administrador**:
-   Com os containers rodando, abra um novo terminal na raiz do projeto e execute:
-   ```bash
-   docker compose exec backend python manage.py createsuperuser
-   ```
+3.  **Acessar o Projeto**:
+    - **Frontend**: [http://localhost:5173](http://localhost:5173)
+    - **Backend (API)**: [http://localhost:8000](http://localhost:8000)
+
+4.  **Criar Usuário Administrador**:
+    Para criar seu primeiro acesso, execute:
+    ```bash
+    docker compose exec backend python manage.py createsuperuser
+    ```
 
 > [!TIP]
-> Com o Docker, você não precisa se preocupar em instalar Python ou Node localmente, apenas o Docker Engine.
+> **Persistência de Dados**: O banco de dados SQLite está mapeado para um volume chamado `db_data`. Isso garante que suas informações não sejam perdidas ao reiniciar ou remover os containers.
+
+> [!IMPORTANT]
+> **Variáveis de Ambiente**: No Docker, o Frontend utiliza a variável `VITE_URL_API=http://localhost:8000` definida no `docker-compose.yml`. Se precisar alterar o endereço da API, ajuste diretamente nesse arquivo.
 
 ---
 

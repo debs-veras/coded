@@ -5,13 +5,13 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./coded-be:/app
-      - /app/node_modules  # Evitar que o volume sobrescreva os pacotes instalados no container se houver node_modules local
-      - /app/.venv # Evitar que o volume sobrescreva o venv se houver local
+      - /app/.venv
+      - db_data:/app/database
     ports:
       - "8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
-    command: python manage.py runserver 0.0.0.0:8000
+      - PYTHONDONTWRITEBYTECODE=1
 
   frontend:
     build:
@@ -19,11 +19,13 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./coded-fe:/app
-      - /app/node_modules # Não sobrescrever o node_modules do container com o local
+      - /app/node_modules
     ports:
       - "5173:5173"
     environment:
-      - VITE_API_URL=http://localhost:8000
+      - VITE_URL_API=http://localhost:8000
     depends_on:
       - backend
-    command: pnpm run dev --host
+
+volumes:
+  db_data: 
